@@ -4,8 +4,8 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { stripe } from "@/lib/stripe";
 import Stripe from "stripe";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import { useState } from "react";
+import Head from "next/head";
 
 interface ProductProps {
     product: {
@@ -36,6 +36,10 @@ export default function Product({product}: ProductProps) {
     }
   
     return (
+       <>
+       <Head>
+        <title>{product.name} | Ignite Shop</title>
+       </Head>
         <ProductContainer>
             <ImageContainer>
                 <Image src={product.imageUrl} width={520} height={480} alt="" />
@@ -45,9 +49,10 @@ export default function Product({product}: ProductProps) {
                 <h1>{product.name}</h1>
                 <span>{product.price}</span>
                 <p>{product.description}</p>
-                <button  disable={isCreatingCheckout} onClick={handleBuyProduct}>Comprar agora</button>
+                <button disabled={isCreatingCheckout} onClick={handleBuyProduct}>Comprar agora</button>
             </ProductDetails>
         </ProductContainer>
+       </>
     );
 }
 
