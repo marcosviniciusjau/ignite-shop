@@ -1,83 +1,40 @@
-import { GetServerSideProps } from "next";
 import Head from "next/head";
-import { useKeenSlider } from 'keen-slider/react'
 
-import Image from "next/image";
-import 'keen-slider/keen-slider.min.css';
-import Link from "next/link";
+import "keen-slider/keen-slider.min.css";
 
-import { stripe } from "../lib/stripe";
-import Stripe from "stripe";
+import { Search } from "./search";
 
-import { HomeContainer, Product } from "@/styles/pages/home";
-interface HomeProps{
-  products: {
-    id: string
-    name: string
-    imageUrl: string
-    price: string
-  }[]
-}
+import { Product as Products } from "use-shopping-cart/core";
+import { ProductsTable } from "./products_table";
+import { useShoppingCart } from "use-shopping-cart";
 
-export default function Home({products}: HomeProps) {
-  const [sliderRef]= useKeenSlider({
-    slides:{
-      perView: 3,
-      spacing: 48,
-    }
-  })
+export default function Home() {
+   
+  const products: Products[] = [
+    {
+      name: "Pizzas médias",
+      description: "média",
+      price: "39,90",
+      imageUrl:
+        "https://files.stripe.com/links/MDB8YWNjdF8xUDF1VVJFZW9kaVJvYkhRfGZsX3Rlc3RfM0Q3anFhZmlkUkNBMWVOME4zZHhUamM000ynJiYgL4",
+      princingTableId: "prctbl_1QMz35EeodiRobHQsjvfXGn0",
+    },
+    {
+      name: "Pizza queijo",
+      description: "descricao",
+      price: "39,90",
+      imageUrl:
+        "https://files.stripe.com/links/MDB8YWNjdF8xUDF1VVJFZW9kaVJvYkhRfGZsX3Rlc3RfRlJHV3lXcXlVTE9OQTNVUVVmY2hGOU12006XpJgrrz",
+      princingTableId: "",
+    },
+  ];
+
   return (
     <>
-    <Head>
-      <title>Home | Ignite Shop</title>
-    </Head>
-    
-    <HomeContainer ref={sliderRef} className="keen-slider">
-    
-    {products.map(product => {
-       return (
-         <Link href={`/product/${product.id}`} key={product.id} prefetch={false}>
-           <Product className="keen-slider__slide">
-           <Image src={product.imageUrl} width={520} height={480} alt="" />
-           <footer>
-             <strong>{product.name}</strong>
-             <span>{product.price}</span>
-           </footer>
-         </Product>
-         </Link>
-       )
-     })}
-    
-     
-   </HomeContainer>
-   </>
-    
+      <Head>
+        <title>Home | Pizza Shop</title>
+      </Head>
+      <ProductsTable products={products} />
+    </>
   );
-}
-export const getServerSideProps: GetServerSideProps = async () => {
-  const response = await stripe.products.list({
-    expand: ["data.default_price"]
-  })
-
-
-  const products = response.data.map(product => {
-    
-  const price= product.default_price as Stripe.Price;
-  
-    return {
-      id: product.id,
-      name: product.name,
-      imageUrl: product.images[0],
-      price: new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-    }).format(price.unit_amount / 100),
-    }
-  })
-
-  return{
-    props:{
-      products,
-    },
-  }
 }

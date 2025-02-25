@@ -26,12 +26,12 @@ export const SuccessContainer = styled('main', {
     display: 'block',
     marginTop: '5rem',
     fontSize: '$lg',
-    color: '$green500',
+    color: '$red700',
     textDecoration: 'none',
     fontWeight: 'bold',
 
     '&:hover': {
-      color: '$green300',
+      background: 'linear-gradient(180deg, #ffd700 10%, #fa8700 100%)',
     }
   }
 });
@@ -40,7 +40,7 @@ export const ImageContainer = styled('div', {
   width: '100%',
   maxWidth: 130,
   height: 145,
-  background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
+  background: 'linear-gradient(180deg, #ffd700 10%, #fa8700 100%)',
   borderRadius: 8,
   padding: '0.25rem',
   marginTop: '4rem',
